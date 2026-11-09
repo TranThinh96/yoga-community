@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sand-50: #fbf8f2;
+  --color-sand-100: #f4eee3;
+  --color-sand-200: #e8dfcd;
+  --color-sand-300: #d6c8ad;
+  --color-moss-50: #f1f3ea;
+  --color-moss-100: #dfe4cf;
+  --color-moss-500: #6b7a4b;
+  --color-moss-600: #56633b;
+  --color-moss-700: #434d2f;
+  --color-moss-800: #333a25;
+  --color-earth-500: #8a6a4f;
+  --color-earth-700: #5c4533;
+  --color-ink: #2e2a24;
+  --color-ink-soft: #5f584e;
+
+  --font-sans: var(--font-be-vietnam), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-lora), ui-serif, Georgia, serif;
+}
+
+body {
+  background: var(--color-sand-50);
+  color: var(--color-ink);
+}
+
+.prose-vi {
+  line-height: 1.8;
+  color: var(--color-ink-soft);
+}
+.prose-vi p { margin: 0 0 1rem; }
+.prose-vi strong { color: var(--color-ink); }
+.prose-vi blockquote {
+  border-left: 3px solid var(--color-moss-500);
+  padding: 0.25rem 1rem;
+  margin: 0 0 1rem;
+  background: var(--color-moss-50);
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+.prose-vi blockquote p { margin: 0; }
+.prose-vi ul { list-style: disc; padding-left: 1.25rem; margin-bottom: 1rem; }
+.prose-vi a { color: var(--color-moss-600); text-decoration: underline; }
+.prose-vi h2, .prose-vi h3 { font-family: var(--font-serif); color: var(--color-ink); margin: 1.5rem 0 0.75rem; }
+.prose-vi h2 { font-size: 1.4rem; }
+.prose-vi h3 { font-size: 1.15rem; }
