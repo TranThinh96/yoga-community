@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTeachers, getWorkshops } from "@/lib/content";
 import { WorkshopCard } from "@/components/WorkshopCard";
+import { PageHero } from "@/components/PageHero";
 
 export const metadata: Metadata = {
   title: "Lịch workshop",
@@ -34,55 +35,56 @@ export default async function WorkshopsPage({ searchParams }: Props) {
   };
 
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-12 sm:px-6 sm:pt-16">
-      <p className="text-sm uppercase tracking-[0.2em] text-moss-600">Lịch chung của nhóm</p>
-      <h1 className="mt-2 font-serif text-4xl text-ink">Lịch workshop</h1>
-      <p className="mt-4 max-w-2xl leading-relaxed text-ink-soft">
-        Các buổi workshop online qua Zoom và trực tiếp của đội ngũ giáo viên. Thời gian hiển thị theo giờ Việt Nam.
-      </p>
+    <>
+      <PageHero eyebrow="Lịch chung của nhóm" title="Lịch workshop"
+        intro="Các buổi workshop online qua Zoom và trực tiếp của đội ngũ giáo viên. Thời gian hiển thị theo giờ Việt Nam.">
+        <div className="mt-10 space-y-3">
+          <FilterRow label="Hình thức">
+            <Chip href={href({ "hinh-thuc": undefined })} active={!formatFilter}>Tất cả</Chip>
+            <Chip href={href({ "hinh-thuc": "online" })} active={formatFilter === "online"}>Online</Chip>
+            <Chip href={href({ "hinh-thuc": "offline" })} active={formatFilter === "offline"}>Trực tiếp</Chip>
+          </FilterRow>
+          <FilterRow label="Giáo viên">
+            <Chip href={href({ "giao-vien": undefined })} active={!teacherFilter}>Tất cả</Chip>
+            {teachers.map((t) => (
+              <Chip key={t.slug} href={href({ "giao-vien": t.slug })} active={teacherFilter === t.slug}>{t.name}</Chip>
+            ))}
+          </FilterRow>
+        </div>
+      </PageHero>
 
-      <div className="mt-8 space-y-3">
-        <FilterRow label="Hình thức">
-          <Chip href={href({ "hinh-thuc": undefined })} active={!formatFilter}>Tất cả</Chip>
-          <Chip href={href({ "hinh-thuc": "online" })} active={formatFilter === "online"}>Online</Chip>
-          <Chip href={href({ "hinh-thuc": "offline" })} active={formatFilter === "offline"}>Offline</Chip>
-        </FilterRow>
-        <FilterRow label="Giáo viên">
-          <Chip href={href({ "giao-vien": undefined })} active={!teacherFilter}>Tất cả</Chip>
-          {teachers.map((t) => (
-            <Chip key={t.slug} href={href({ "giao-vien": t.slug })} active={teacherFilter === t.slug}>{t.name}</Chip>
-          ))}
-        </FilterRow>
-      </div>
-
-      <section className="mt-10">
-        <h2 className="font-serif text-2xl text-ink">Sắp diễn ra</h2>
-        {upcoming.length ? (
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
-            {upcoming.map((w) => <WorkshopCard key={w.slug} workshop={w} teacher={teacherBySlug.get(w.teacher)} />)}
-          </div>
-        ) : (
-          <p className="mt-4 text-ink-soft">Chưa có buổi nào phù hợp. Hãy quay lại sau hoặc chọn bộ lọc khác nhé.</p>
-        )}
-      </section>
-
-      {past.length > 0 && (
-        <section className="mt-14">
-          <h2 className="font-serif text-2xl text-ink">Đã diễn ra</h2>
-          <div className="mt-5 grid gap-4 md:grid-cols-2">
-            {past.map((w) => <WorkshopCard key={w.slug} workshop={w} teacher={teacherBySlug.get(w.teacher)} past />)}
-          </div>
+      <div className="mx-auto max-w-6xl px-5 sm:px-8">
+        <section>
+          <h2 className="font-serif text-2xl tracking-tight text-ink sm:text-3xl" data-reveal>
+            Sắp diễn ra <span className="ml-1 align-middle font-sans text-sm text-ink-soft">({upcoming.length})</span>
+          </h2>
+          {upcoming.length ? (
+            <div className="mt-8 grid gap-5 lg:grid-cols-2">
+              {upcoming.map((w, i) => <WorkshopCard key={w.slug} workshop={w} teacher={teacherBySlug.get(w.teacher)} delay={(i % 2) * 100} />)}
+            </div>
+          ) : (
+            <p className="card mt-8 p-6 text-ink-soft" data-reveal>Chưa có buổi nào phù hợp. Hãy quay lại sau hoặc chọn bộ lọc khác nhé.</p>
+          )}
         </section>
-      )}
-    </div>
+
+        {past.length > 0 && (
+          <section className="mt-20">
+            <h2 className="font-serif text-2xl tracking-tight text-ink sm:text-3xl" data-reveal>Đã diễn ra</h2>
+            <div className="mt-8 grid gap-5 lg:grid-cols-2">
+              {past.map((w, i) => <WorkshopCard key={w.slug} workshop={w} teacher={teacherBySlug.get(w.teacher)} past delay={(i % 2) * 100} />)}
+            </div>
+          </section>
+        )}
+      </div>
+    </>
   );
 }
 
 function FilterRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="flex items-center gap-3">
-      <span className="w-20 shrink-0 text-sm text-ink-soft">{label}</span>
-      <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none]">{children}</div>
+    <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+      <span className="w-24 shrink-0 text-xs tracking-[0.15em] text-ink-soft uppercase">{label}</span>
+      <div className="no-scrollbar -mx-5 flex gap-2 overflow-x-auto px-5 pb-1 sm:mx-0 sm:px-0">{children}</div>
     </div>
   );
 }
@@ -90,7 +92,9 @@ function FilterRow({ label, children }: { label: string; children: React.ReactNo
 function Chip({ href, active, children }: { href: string; active: boolean; children: React.ReactNode }) {
   return (
     <Link href={href} scroll={false} aria-current={active ? "true" : undefined}
-      className={`shrink-0 whitespace-nowrap rounded-full border px-4 py-1.5 text-sm transition ${active ? "border-moss-600 bg-moss-600 text-sand-50" : "border-sand-300 bg-white/70 text-ink-soft hover:border-moss-500"}`}>
+      className={`inline-flex min-h-11 shrink-0 items-center rounded-full border px-5 text-sm whitespace-nowrap transition-all duration-300 ${
+        active ? "border-moss-700 bg-moss-700 text-sand-50 shadow-[0_8px_20px_-12px_rgb(51_58_37/0.7)]" : "border-sand-300 bg-white/70 text-ink-soft hover:border-moss-400 hover:text-ink"
+      }`}>
       {children}
     </Link>
   );

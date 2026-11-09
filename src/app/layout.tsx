@@ -3,6 +3,7 @@ import { Be_Vietnam_Pro, Lora } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { RevealObserver } from "@/components/RevealObserver";
 import { site } from "@/lib/site";
 
 const beVietnam = Be_Vietnam_Pro({
@@ -15,6 +16,7 @@ const beVietnam = Be_Vietnam_Pro({
 const lora = Lora({
   subsets: ["vietnamese", "latin"],
   weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
   variable: "--font-lora",
   display: "swap",
 });
@@ -30,13 +32,21 @@ export const viewport: Viewport = { themeColor: "#fbf8f2" };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="vi" className={`${beVietnam.variable} ${lora.variable}`}>
+    <html lang="vi" className={`${beVietnam.variable} ${lora.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Bật hiệu ứng xuất hiện chỉ khi JS chạy được */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
       <body className="font-sans antialiased">
+        <a href="#noi-dung" className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-full focus:bg-moss-700 focus:px-4 focus:py-2 focus:text-sand-50">
+          Bỏ qua đến nội dung
+        </a>
         <div className="flex min-h-dvh flex-col">
           <SiteHeader />
-          <main className="flex-1">{children}</main>
+          <main id="noi-dung" className="flex-1">{children}</main>
           <SiteFooter />
         </div>
+        <RevealObserver />
       </body>
     </html>
   );

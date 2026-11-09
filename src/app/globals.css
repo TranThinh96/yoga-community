@@ -1,46 +1,283 @@
 @import "tailwindcss";
 
+/* ============================================================
+   Hệ thống thiết kế — Chang Chang Khí Thần
+   Phong cách: Organic Biophilic (tĩnh, cân bằng, tự nhiên)
+   Chi tiết: design-system/MASTER.md
+   ============================================================ */
+
 @theme {
   --color-sand-50: #fbf8f2;
-  --color-sand-100: #f4eee3;
-  --color-sand-200: #e8dfcd;
-  --color-sand-300: #d6c8ad;
-  --color-moss-50: #f1f3ea;
-  --color-moss-100: #dfe4cf;
+  --color-sand-100: #f5efe4;
+  --color-sand-200: #ebe2d1;
+  --color-sand-300: #d9cbb0;
+  --color-sand-400: #c2ad88;
+  --color-moss-50: #f0f2e8;
+  --color-moss-100: #dde3cb;
+  --color-moss-200: #c2cca5;
+  --color-moss-400: #8a9868;
   --color-moss-500: #6b7a4b;
   --color-moss-600: #56633b;
   --color-moss-700: #434d2f;
   --color-moss-800: #333a25;
+  --color-moss-900: #23281a;
+  --color-earth-400: #a8876a;
   --color-earth-500: #8a6a4f;
   --color-earth-700: #5c4533;
-  --color-ink: #2e2a24;
-  --color-ink-soft: #5f584e;
+  --color-ink: #2b2721;
+  --color-ink-soft: #5c554b;
 
   --font-sans: var(--font-be-vietnam), ui-sans-serif, system-ui, sans-serif;
   --font-serif: var(--font-lora), ui-serif, Georgia, serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-breath: cubic-bezier(0.45, 0, 0.55, 1);
+
+  --radius-organic: 42% 58% 55% 45% / 48% 42% 58% 52%;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   background: var(--color-sand-50);
   color: var(--color-ink);
+  text-rendering: optimizeLegibility;
 }
 
+::selection {
+  background: var(--color-moss-200);
+  color: var(--color-moss-900);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-moss-600);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Nền giấy có vân rất nhẹ */
+.paper {
+  background-image:
+    radial-gradient(ellipse 80% 60% at 85% 0%, rgb(221 227 203 / 0.55), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 0% 30%, rgb(235 226 209 / 0.7), transparent 60%);
+}
+
+/* ---------- Nút ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 48px;
+  padding: 0 1.6rem;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition:
+    background-color 250ms var(--ease-out-soft),
+    color 250ms var(--ease-out-soft),
+    border-color 250ms var(--ease-out-soft),
+    box-shadow 300ms var(--ease-out-soft),
+    transform 300ms var(--ease-out-soft);
+}
+.btn:active { transform: scale(0.98); }
+.btn-primary {
+  background: var(--color-moss-700);
+  color: var(--color-sand-50);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.12) inset, 0 8px 24px -10px rgb(51 58 37 / 0.55);
+}
+.btn-primary:hover { background: var(--color-moss-800); box-shadow: 0 1px 0 rgb(255 255 255 / 0.12) inset, 0 14px 30px -12px rgb(51 58 37 / 0.6); }
+.btn-ghost {
+  border: 1px solid var(--color-sand-300);
+  background: rgb(255 255 255 / 0.55);
+  color: var(--color-ink);
+  backdrop-filter: blur(6px);
+}
+.btn-ghost:hover { border-color: var(--color-moss-500); color: var(--color-moss-700); background: white; }
+.btn-light { background: var(--color-sand-50); color: var(--color-moss-800); }
+.btn-light:hover { background: white; }
+.btn .arrow { transition: transform 300ms var(--ease-out-soft); }
+.btn:hover .arrow, .group:hover .arrow { transform: translateX(4px); }
+
+/* ---------- Thẻ ---------- */
+.card {
+  border: 1px solid rgb(217 203 176 / 0.6);
+  background: rgb(255 255 255 / 0.65);
+  border-radius: 1.5rem;
+  transition:
+    transform 450ms var(--ease-out-soft),
+    box-shadow 450ms var(--ease-out-soft),
+    border-color 300ms var(--ease-out-soft);
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  border-color: rgb(107 122 75 / 0.35);
+  box-shadow: 0 24px 48px -28px rgb(67 77 47 / 0.35);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-moss-600);
+}
+.eyebrow::before {
+  content: "";
+  width: 1.75rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+/* ---------- Hiệu ứng xuất hiện khi cuộn ----------
+   Chỉ áp dụng khi JS đã chạy (html.js) để không ẩn nội dung nếu JS lỗi. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translate3d(0, 28px, 0);
+  transition:
+    opacity 900ms var(--ease-out-soft),
+    transform 1100ms var(--ease-out-soft);
+  transition-delay: var(--d, 0ms);
+}
+.js [data-reveal="fade"] { transform: none; }
+.js [data-reveal="scale"] { transform: scale(0.96); }
+.js [data-reveal].is-visible { opacity: 1; transform: none; }
+
+/* Chữ trượt lên từ dưới mặt nạ (tiêu đề hero) */
+.line-mask { display: block; overflow: hidden; padding-bottom: 0.08em; margin-bottom: -0.08em; }
+.line-mask > span {
+  display: block;
+  animation: line-up 1200ms var(--ease-out-soft) both;
+  animation-delay: var(--d, 0ms);
+}
+@keyframes line-up {
+  from { transform: translate3d(0, 105%, 0); }
+  to { transform: none; }
+}
+.fade-up { animation: fade-up 1000ms var(--ease-out-soft) both; animation-delay: var(--d, 0ms); }
+@keyframes fade-up {
+  from { opacity: 0; transform: translate3d(0, 16px, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ---------- Hơi thở: vòng tròn nở – co theo nhịp 4s hít / 2s giữ / 6s thở ---------- */
+.breath {
+  animation: breath 12s var(--ease-breath) infinite;
+  transform-origin: center;
+}
+.breath-delay-1 { animation-delay: -0.4s; }
+.breath-delay-2 { animation-delay: -0.8s; }
+@keyframes breath {
+  0% { transform: scale(0.82); }
+  33% { transform: scale(1); }
+  50% { transform: scale(1); }
+  100% { transform: scale(0.82); }
+}
+.breath-label-in { animation: label-in 12s linear infinite both; }
+.breath-label-out { animation: label-out 12s linear infinite both; }
+@keyframes label-in {
+  0%, 30% { opacity: 1; }
+  34%, 96% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes label-out {
+  0%, 46% { opacity: 0; }
+  50%, 96% { opacity: 1; }
+  100% { opacity: 0; }
+}
+.breath-label-hold { animation: label-hold 12s linear infinite both; }
+@keyframes label-hold {
+  0%, 31% { opacity: 0; }
+  34%, 47% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* Trục cột sống tự vẽ */
+.draw-path {
+  stroke-dasharray: var(--len, 600);
+  stroke-dashoffset: var(--len, 600);
+  animation: draw 2400ms var(--ease-out-soft) forwards;
+  animation-delay: var(--d, 300ms);
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+.pop-in { animation: pop-in 700ms var(--ease-out-soft) both; animation-delay: var(--d, 0ms); }
+@keyframes pop-in {
+  from { opacity: 0; transform: scale(0.4); }
+  to { opacity: 1; transform: none; }
+}
+
+.float-slow { animation: float 14s ease-in-out infinite; }
+@keyframes float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(0, -14px, 0) rotate(3deg); }
+}
+
+/* Chuyển trang */
+.page-enter { animation: page-enter 600ms var(--ease-out-soft) both; }
+@keyframes page-enter {
+  from { opacity: 0; transform: translate3d(0, 8px, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Ảnh phóng nhẹ khi rê chuột */
+.zoom-media { transition: transform 1200ms var(--ease-out-soft); }
+.group:hover .zoom-media { transform: scale(1.05); }
+
+/* Gạch chân trượt cho link */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 400ms var(--ease-out-soft);
+}
+.link-underline:hover { background-size: 100% 1px; }
+
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* ---------- Nội dung Markdown ---------- */
 .prose-vi {
-  line-height: 1.8;
+  font-size: 1.05rem;
+  line-height: 1.85;
   color: var(--color-ink-soft);
 }
-.prose-vi p { margin: 0 0 1rem; }
-.prose-vi strong { color: var(--color-ink); }
+.prose-vi p { margin: 0 0 1.1rem; }
+.prose-vi strong { color: var(--color-ink); font-weight: 600; }
 .prose-vi blockquote {
-  border-left: 3px solid var(--color-moss-500);
-  padding: 0.25rem 1rem;
-  margin: 0 0 1rem;
+  border-left: 2px solid var(--color-moss-400);
+  padding: 0.5rem 1.1rem;
+  margin: 0 0 1.25rem;
   background: var(--color-moss-50);
-  border-radius: 0 0.5rem 0.5rem 0;
+  border-radius: 0 0.75rem 0.75rem 0;
+  font-size: 0.95rem;
 }
 .prose-vi blockquote p { margin: 0; }
-.prose-vi ul { list-style: disc; padding-left: 1.25rem; margin-bottom: 1rem; }
-.prose-vi a { color: var(--color-moss-600); text-decoration: underline; }
-.prose-vi h2, .prose-vi h3 { font-family: var(--font-serif); color: var(--color-ink); margin: 1.5rem 0 0.75rem; }
-.prose-vi h2 { font-size: 1.4rem; }
-.prose-vi h3 { font-size: 1.15rem; }
+.prose-vi ul { list-style: disc; padding-left: 1.25rem; margin-bottom: 1.1rem; }
+.prose-vi a { color: var(--color-moss-700); text-decoration: underline; text-underline-offset: 3px; }
+.prose-vi h2, .prose-vi h3 { font-family: var(--font-serif); color: var(--color-ink); margin: 1.75rem 0 0.75rem; }
+.prose-vi h2 { font-size: 1.5rem; }
+.prose-vi h3 { font-size: 1.2rem; }
+
+/* ---------- Tôn trọng thiết lập giảm chuyển động ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .js [data-reveal] { opacity: 1; transform: none; }
+  .breath { transform: scale(0.92); }
+  .breath-label-in { opacity: 1; }
+  .breath-label-out, .breath-label-hold { opacity: 0; }
+  .draw-path { stroke-dashoffset: 0; }
+}
