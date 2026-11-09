@@ -2,10 +2,10 @@ import Link from "next/link";
 import { SpineMark } from "./SpineMark";
 import { site } from "@/lib/site";
 
-// Thêm mục khi các trang ở bước sau được dựng: /workshop, /kien-thuc, /dao-tao
+// Thêm mục khi các trang ở bước sau được dựng: /kien-thuc, /dao-tao
 const nav = [
-  { href: "/", label: "Trang chủ" },
   { href: "/giao-vien", label: "Giáo viên" },
+  { href: "/workshop", label: "Workshop" },
 ];
 
 export function SiteHeader() {

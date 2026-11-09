@@ -27,9 +27,9 @@ export default function HomePage() {
             và y khoa, lấy hơi thở làm gốc và cột sống làm trọng tâm.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href="#workshop" className="rounded-full bg-moss-600 px-6 py-3 text-sm font-medium text-sand-50 transition hover:bg-moss-700">
+            <Link href="/workshop" className="rounded-full bg-moss-600 px-6 py-3 text-sm font-medium text-sand-50 transition hover:bg-moss-700">
               Xem workshop sắp tới
-            </a>
+            </Link>
             <Link href="/giao-vien" className="rounded-full border border-moss-600/40 px-6 py-3 text-sm font-medium text-moss-700 transition hover:bg-moss-50">
               Gặp đội ngũ giáo viên
             </Link>
@@ -52,7 +52,12 @@ export default function HomePage() {
 
       {/* Workshop sắp tới */}
       <section id="workshop" className="mx-auto max-w-6xl scroll-mt-20 px-4 pt-16 sm:px-6">
-        <SectionTitle eyebrow="Lịch chung của nhóm" title="Workshop sắp tới" />
+        <div className="flex items-end justify-between gap-4">
+          <SectionTitle eyebrow="Lịch chung của nhóm" title="Workshop sắp tới" />
+          <Link href="/workshop" className="shrink-0 text-sm text-moss-700 underline-offset-4 hover:underline">
+            Xem lịch →
+          </Link>
+        </div>
         {upcoming.length ? (
           <div className="mt-8 grid gap-4 md:grid-cols-2">
             {upcoming.map((w) => (
